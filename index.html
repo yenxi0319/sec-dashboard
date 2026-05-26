@@ -3,378 +3,512 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>S.E.C — 아이디어 제안</title>
+<title>S.E.C Dashboard</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg-deep:    #050d1a;
+    --bg-card:    #0a1628;
+    --bg-card2:   #0d1f38;
+    --accent:     #00d4ff;
+    --accent2:    #00ff9d;
+    --accent3:    #4f8fff;
+    --text:       #e8f4ff;
+    --text-muted: #5a7a9a;
+    --border:     rgba(0,212,255,0.15);
+    --glow:       0 0 18px rgba(0,212,255,0.25);
+    --glow2:      0 0 18px rgba(0,255,157,0.2);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
 
   body {
+    background: var(--bg-deep);
+    color: var(--text);
     font-family: 'Noto Sans KR', sans-serif;
-    background: #f0f0f0;
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-    padding: 40px;
-    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
   }
 
-  /* ─── 공통 슬라이드 래퍼 ─── */
-  .slide {
-    width: 960px;
-    background: #c8ccd3;
-    border-radius: 14px;
-    padding: 38px 52px 36px;
+  /* 별 배경 */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 40%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 40% 8%,  rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 30%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 60%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 20%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 92% 75%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 5%  80%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 55%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 33% 70%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 18% 55%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 68% 85%, rgba(255,255,255,0.4) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* 지구 글로우 */
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -180px; right: -180px;
+    width: 420px; height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,80,180,0.18) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
     position: relative;
-  }
-  .slide-label {
-    position: absolute;
-    top: 14px; right: 22px;
-    font-size: 11px;
-    color: #555;
-    letter-spacing: 0.3px;
-  }
-  .slide-divider {
-    position: absolute;
-    top: 32px; left: 22px; right: 22px;
-    height: 0.5px;
-    background: #999;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 24px 48px;
   }
 
-  /* ─── 슬라이드 1 : 솔루션 타이틀 ─── */
-  .s1-title {
-    font-size: 30px;
-    font-weight: 700;
-    color: #1a1a1a;
-    margin: 22px 0 6px;
+  /* 헤더 */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
   }
-  .s1-sub {
-    font-size: 14px;
-    color: #555;
-    margin: 0 0 32px;
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
   }
-  .s1-mission {
-    background: #4a4f56;
+  .logo-icon {
+    width: 42px; height: 42px;
     border-radius: 10px;
-    padding: 30px 36px;
-    text-align: center;
+    border: 1px solid var(--accent);
+    box-shadow: var(--glow);
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0,212,255,0.08);
   }
-  .s1-mission p {
-    font-size: 18px;
-    color: #f0f0f0;
-    line-height: 2;
-    font-weight: 400;
-  }
-  .s1-mission span {
-    color: #7de0b0;
-    font-weight: 700;
-  }
-
-  /* ─── 슬라이드 2 : 3대 메커니즘 ─── */
-  .s2-title {
+  .logo-text h1 {
+    font-family: 'Space Grotesk', sans-serif;
     font-size: 20px;
-    font-weight: 700;
-    color: #1a1a1a;
-    margin: 22px 0 4px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 1px;
   }
-  .s2-sub {
-    font-size: 12px;
-    color: #666;
-    margin: 0 0 22px;
+  .logo-text p {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 1px;
   }
-  .s2-body {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-    align-items: start;
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .live-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--accent2);
+    background: rgba(0,255,157,0.08);
+    border: 1px solid rgba(0,255,157,0.2);
+    border-radius: 20px;
+    padding: 4px 12px;
+  }
+  .live-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent2);
+    animation: pulse 1.8s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity:1; transform:scale(1); }
+    50% { opacity:0.4; transform:scale(0.8); }
+  }
+  .date-txt {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: 'Space Grotesk', sans-serif;
   }
 
-  /* 대시보드 목업 */
-  .dashboard {
-    background: rgba(255,255,255,0.75);
-    border-radius: 10px;
-    padding: 16px;
+  /* 카드 공통 */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,212,255,0.4), transparent);
+  }
+  .card-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  /* 상단 스탯 3개 */
+  .stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .stat-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .stat-num.cyan  { color: var(--accent);  text-shadow: 0 0 20px rgba(0,212,255,0.5); }
+  .stat-num.green { color: var(--accent2); text-shadow: 0 0 20px rgba(0,255,157,0.4); }
+  .stat-num.blue  { color: var(--accent3); text-shadow: 0 0 20px rgba(79,143,255,0.4); }
+  .stat-unit {
+    font-size: 13px;
+    font-weight: 400;
+    margin-left: 3px;
+    opacity: 0.7;
+  }
+  .stat-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* 효율 바 */
+  .efficiency-bar-wrap {
+    margin-top: 10px;
+    height: 4px;
+    background: rgba(0,212,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .efficiency-bar {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent3), var(--accent));
+    box-shadow: 0 0 8px rgba(0,212,255,0.6);
+    transition: width 1s ease;
+  }
+
+  /* 중단 2열 */
+  .mid-row {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  /* 차트 */
+  .chart-area {
+    position: relative;
+    margin-top: 8px;
+  }
+  .chart-legend {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+  .legend-line {
+    width: 20px; height: 2px;
+    border-radius: 1px;
+  }
+  .legend-line.dashed {
+    background: repeating-linear-gradient(90deg, var(--text-muted) 0, var(--text-muted) 4px, transparent 4px, transparent 8px);
+  }
+
+  /* 위성 상태 */
+  .sat-list {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    margin-top: 8px;
   }
-  .db-label {
-    font-size: 10px;
-    color: #666;
-    margin: 0 0 2px;
-    letter-spacing: 0.3px;
-  }
-  .db-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-  }
-  .db-stat {
-    background: #e4edf4;
-    border-radius: 6px;
-    padding: 8px 10px;
-    text-align: center;
-  }
-  .db-stat-num {
-    display: block;
-    font-size: 17px;
-    font-weight: 700;
-    color: #1a6e4a;
-  }
-  .db-stat-lbl {
-    display: block;
-    font-size: 8.5px;
-    color: #666;
-    margin-top: 2px;
-  }
-  .db-chart-wrap {
-    background: #e4edf4;
-    border-radius: 6px;
-    padding: 10px 12px;
-  }
-  .db-chart-title {
-    font-size: 8.5px;
-    color: #666;
-    margin: 0 0 6px;
-  }
-  .db-alert {
-    background: #e2f5ec;
-    border-radius: 6px;
-    padding: 7px 11px;
+  .sat-item {
     display: flex;
     align-items: center;
-    gap: 8px;
-  }
-  .db-alert-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: #1a9e65;
-    flex-shrink: 0;
-  }
-  .db-alert-txt {
-    font-size: 9px;
-    color: #1a6e4a;
-  }
-  .db-carbon {
-    background: #e4edf4;
-    border-radius: 6px;
+    gap: 10px;
     padding: 9px 12px;
-  }
-  .db-carbon p:first-child {
-    font-size: 9px;
-    color: #666;
-    margin: 0 0 3px;
-  }
-  .db-carbon p:last-child {
-    font-size: 13px;
-    font-weight: 500;
-    color: #1a6e4a;
-  }
-
-  /* 메커니즘 카드 */
-  .mech-list {
-    display: flex;
-    flex-direction: column;
-    gap: 11px;
-  }
-  .mech-card {
-    background: rgba(255,255,255,0.55);
-    border-radius: 10px;
-    padding: 13px 15px;
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-  }
-  .mech-icon {
-    width: 36px; height: 36px;
+    background: rgba(0,212,255,0.04);
+    border: 1px solid rgba(0,212,255,0.1);
     border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  }
+  .sat-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
     flex-shrink: 0;
-    font-size: 18px;
   }
-  .mech-icon.sky    { background: #d6eaf8; }
-  .mech-icon.ground { background: #d5f0e3; }
-  .mech-icon.cls    { background: #fdebd0; }
-  .mech-num {
-    font-size: 9px;
-    font-weight: 500;
-    color: #777;
-    letter-spacing: 0.5px;
-    margin: 0 0 2px;
+  .sat-dot.on  { background: var(--accent2); box-shadow: 0 0 6px var(--accent2); }
+  .sat-dot.dim { background: var(--accent);  box-shadow: 0 0 6px var(--accent); }
+  .sat-name { font-size: 11px; color: var(--text); flex: 1; }
+  .sat-val  { font-size: 11px; color: var(--accent); font-family:'Space Grotesk',sans-serif; }
+
+  /* 하단 알림 + 탄소 */
+  .bottom-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
   }
-  .mech-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: #1a1a1a;
-    margin: 0 0 3px;
+  .alert-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 11px 14px;
+    border-radius: 8px;
+    margin-top: 6px;
   }
-  .mech-desc {
-    font-size: 10.5px;
-    color: #444;
-    line-height: 1.65;
-    margin: 0 0 5px;
+  .alert-row.ok {
+    background: rgba(0,255,157,0.06);
+    border: 1px solid rgba(0,255,157,0.18);
   }
-  .mech-badge {
-    display: inline-block;
-    font-size: 9px;
-    color: #3a3a3a;
-    background: rgba(0,0,0,0.09);
-    border-radius: 4px;
-    padding: 2px 7px;
+  .alert-row.warn {
+    background: rgba(255,180,0,0.06);
+    border: 1px solid rgba(255,180,0,0.18);
+  }
+  .alert-icon { font-size: 15px; flex-shrink:0; margin-top:1px; }
+  .alert-title { font-size: 12px; font-weight: 500; color: var(--accent2); margin-bottom: 2px; }
+  .alert-title.warn-txt { color: #ffb400; }
+  .alert-desc  { font-size: 10.5px; color: var(--text-muted); line-height: 1.55; }
+
+  .carbon-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--accent2);
+    text-shadow: 0 0 16px rgba(0,255,157,0.4);
+    margin: 6px 0 2px;
+  }
+  .carbon-eq {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-top: 6px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(0,212,255,0.1);
+  }
+  .carbon-eq span { color: var(--accent2); font-weight: 500; }
+
+  /* 전기 줄기 애니메이션 */
+  .electric-line {
+    position: absolute;
+    top: 0; right: 0;
+    width: 120px; height: 120px;
+    opacity: 0.06;
+    pointer-events: none;
   }
 </style>
 </head>
 <body>
+<div class="wrapper">
 
-<!-- ── 슬라이드 1: 솔루션 타이틀 ── -->
-<div class="slide">
-  <span class="slide-label">2. 아이디어 제안 (Core Idea)</span>
-  <div class="slide-divider"></div>
-
-  <p class="s1-title">S.E.C(Space Energy Control) 시스템 솔루션</p>
-  <p class="s1-sub">위성 영상 및 지상 IoT 융합 기반의 지능형 태양광 관리 및 생태 교육 플랫폼</p>
-
-  <div class="s1-mission">
-    <p>
-      <span>우주 기술(위성)</span>로 하늘의 흐름을 읽고,
-    </p>
-    <p>
-      <span>IoT</span>로 땅의 발전을 바로 잡아,
-    </p>
-    <p>
-      데이터 기반의 <span>살아있는 생태 전환 교육 모델</span>을 구축합니다.
-    </p>
-  </div>
-</div>
-
-<!-- ── 슬라이드 2: 3대 핵심 메커니즘 ── -->
-<div class="slide">
-  <span class="slide-label">2. 아이디어 제안 (Core Idea)</span>
-  <div class="slide-divider"></div>
-
-  <p class="s2-title">S.E.C 시스템의 3대 핵심 메커니즘</p>
-  <p class="s2-sub">위성 × IoT × AI 교육의 유기적 연결</p>
-
-  <div class="s2-body">
-
-    <!-- 왼쪽: 대시보드 목업 -->
-    <div class="dashboard">
-      <p class="db-label">S.E.C 대시보드 — 실시간 현황</p>
-
-      <div class="db-stats">
-        <div class="db-stat">
-          <span class="db-stat-num">94%</span>
-          <span class="db-stat-lbl">패널 효율</span>
-        </div>
-        <div class="db-stat">
-          <span class="db-stat-num">12.4</span>
-          <span class="db-stat-lbl">오늘 발전 (kWh)</span>
-        </div>
-        <div class="db-stat">
-          <span class="db-stat-num">5.8kg</span>
-          <span class="db-stat-lbl">탄소 절감</span>
-        </div>
-      </div>
-
-      <div class="db-chart-wrap">
-        <p class="db-chart-title">예상 효율 vs 실제 효율</p>
-        <svg width="100%" height="72" viewBox="0 0 280 72">
-          <!-- 그리드 -->
-          <line x1="0" y1="20" x2="280" y2="20" stroke="#cdd6df" stroke-width="0.5"/>
-          <line x1="0" y1="40" x2="280" y2="40" stroke="#cdd6df" stroke-width="0.5"/>
-          <line x1="0" y1="60" x2="280" y2="60" stroke="#cdd6df" stroke-width="0.5"/>
-          <!-- 예상 효율 점선 -->
-          <polyline points="0,52 46,40 92,34 138,28 184,26 230,30 280,28"
-            stroke="#9ab4cc" stroke-width="1.4" fill="none" stroke-dasharray="5,4"/>
-          <!-- 실제 효율 실선 -->
-          <polyline points="0,54 46,42 92,36 138,30 184,28 230,32 280,30"
-            stroke="#1a9e65" stroke-width="2" fill="none"/>
-          <!-- x 라벨 -->
-          <text x="0"   y="71" font-size="7" fill="#aaa">3월</text>
-          <text x="44"  y="71" font-size="7" fill="#aaa">4월</text>
-          <text x="90"  y="71" font-size="7" fill="#aaa">5월</text>
-          <text x="136" y="71" font-size="7" fill="#aaa">6월</text>
-          <text x="182" y="71" font-size="7" fill="#aaa">7월</text>
-          <text x="228" y="71" font-size="7" fill="#aaa">8월</text>
+  <!-- 헤더 -->
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.8">
+          <path d="M12 2a7 7 0 0 1 7 7c0 4-7 13-7 13S5 13 5 9a7 7 0 0 1 7-7z"/>
+          <circle cx="12" cy="9" r="2.5"/>
         </svg>
-        <!-- 범례 -->
-        <div style="display:flex;gap:14px;margin-top:5px;">
-          <div style="display:flex;align-items:center;gap:5px;">
-            <svg width="18" height="6"><line x1="0" y1="3" x2="18" y2="3" stroke="#9ab4cc" stroke-width="1.4" stroke-dasharray="4,3"/></svg>
-            <span style="font-size:8px;color:#888;">예상 (위성 기상)</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:5px;">
-            <svg width="18" height="6"><line x1="0" y1="3" x2="18" y2="3" stroke="#1a9e65" stroke-width="2"/></svg>
-            <span style="font-size:8px;color:#888;">실제 발전</span>
-          </div>
-        </div>
       </div>
-
-      <div class="db-alert">
-        <div class="db-alert-dot"></div>
-        <span class="db-alert-txt">이상 없음 — 위성 기상 예측 대비 정상 범위</span>
-      </div>
-
-      <div class="db-carbon">
-        <p>오늘 우리 학교가 절감한 탄소</p>
-        <p>= 나무 <strong>0.5그루</strong>가 하루 흡수하는 양</p>
+      <div class="logo-text">
+        <h1>S.E.C</h1>
+        <p>Space Energy Control — 실시간 모니터링</p>
       </div>
     </div>
-
-    <!-- 오른쪽: 3대 메커니즘 -->
-    <div class="mech-list">
-
-      <div class="mech-card">
-        <div class="mech-icon sky">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a5fa0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2a7 7 0 0 1 7 7c0 4-7 13-7 13S5 13 5 9a7 7 0 0 1 7-7z"/>
-            <circle cx="12" cy="9" r="2.5"/>
-          </svg>
-        </div>
-        <div>
-          <p class="mech-num">Mechanism 1 — 하늘의 눈 (Top-Down 위성 분석)</p>
-          <p class="mech-title">위성으로 최적 발전량 산출</p>
-          <p class="mech-desc">천리안 위성 2A호 실시간 일사량 데이터와 국토지리정보원 항공사진(SRGAN 초해상도)을 융합해 학교별 이론적 최적 발전 가능량을 정밀하게 산출합니다.</p>
-          <span class="mech-badge">천리안 2A호 · SRGAN · 국토지리정보원</span>
-        </div>
+    <div class="header-right">
+      <div class="live-badge">
+        <div class="live-dot"></div>
+        LIVE
       </div>
-
-      <div class="mech-card">
-        <div class="mech-icon ground">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a6e4a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="4" y="4" width="16" height="16" rx="2"/>
-            <path d="M9 9h6M9 12h6M9 15h4"/>
-          </svg>
-        </div>
-        <div>
-          <p class="mech-num">Mechanism 2 — 땅의 센서 (Bottom-Up IoT 실측)</p>
-          <p class="mech-title">IoT + AI로 이상 선제 감지</p>
-          <p class="mech-desc">지상 IoT 장치로 실제 발전량을 측정하고, AI 에이전트가 위성 예측치와 실시간 비교 분석해 패널 오염·장비 고장을 선제적으로 감지·알림합니다.</p>
-          <span class="mech-badge">IoT 센서 · AI 에이전트 · 실시간 비교분석</span>
-        </div>
-      </div>
-
-      <div class="mech-card">
-        <div class="mech-icon cls">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a06010" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14"/>
-            <path d="M9 7h6M9 11h6M9 15h3"/>
-            <path d="M4 19h16"/>
-          </svg>
-        </div>
-        <div>
-          <p class="mech-num">Mechanism 3 — 교실의 미래 (AI 기반 생태 교육)</p>
-          <p class="mech-title">데이터로 살아있는 환경 교육</p>
-          <p class="mech-desc">절감된 에너지·탄소 데이터를 학생용 시각 대시보드와 생성형 AI 챗봇으로 연동해, 학생들이 오늘의 탄소 절감량을 정량적으로 직접 체감합니다.</p>
-          <span class="mech-badge">시각 대시보드 · 생성형 AI 챗봇</span>
-        </div>
-      </div>
-
+      <span class="date-txt" id="clock">--:--:--</span>
     </div>
   </div>
+
+  <!-- 상단 스탯 3개 -->
+  <div class="stats-row">
+    <div class="card">
+      <p class="card-label">패널 효율</p>
+      <div class="stat-num cyan">94<span class="stat-unit">%</span></div>
+      <p class="stat-sub">위성 예측 대비 정상 범위</p>
+      <div class="efficiency-bar-wrap">
+        <div class="efficiency-bar" style="width:94%"></div>
+      </div>
+    </div>
+    <div class="card">
+      <p class="card-label">오늘 발전량</p>
+      <div class="stat-num green">12.4<span class="stat-unit">kWh</span></div>
+      <p class="stat-sub">어제 대비 <span style="color:#00ff9d">+8.3%</span></p>
+    </div>
+    <div class="card">
+      <p class="card-label">탄소 절감</p>
+      <div class="stat-num blue">5.8<span class="stat-unit">kg</span></div>
+      <p class="stat-sub">누적 이번달 <span style="color:#4f8fff">142kg</span></p>
+    </div>
+  </div>
+
+  <!-- 중단 -->
+  <div class="mid-row">
+
+    <!-- 차트 -->
+    <div class="card">
+      <p class="card-label">예상 효율 vs 실제 발전 효율</p>
+      <div class="chart-legend">
+        <div class="legend-item">
+          <div class="legend-line dashed"></div>
+          <span>예상 (위성 기상 기반)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-line" style="background:var(--accent2);box-shadow:0 0 4px var(--accent2)"></div>
+          <span>실제 발전 효율</span>
+        </div>
+      </div>
+      <div class="chart-area">
+        <svg width="100%" height="130" viewBox="0 0 480 130" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="fillGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"   stop-color="#00ff9d" stop-opacity="0.15"/>
+              <stop offset="100%" stop-color="#00ff9d" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <!-- 그리드 -->
+          <line x1="0" y1="25"  x2="480" y2="25"  stroke="rgba(0,212,255,0.08)" stroke-width="1"/>
+          <line x1="0" y1="55"  x2="480" y2="55"  stroke="rgba(0,212,255,0.08)" stroke-width="1"/>
+          <line x1="0" y1="85"  x2="480" y2="85"  stroke="rgba(0,212,255,0.08)" stroke-width="1"/>
+          <line x1="0" y1="110" x2="480" y2="110" stroke="rgba(0,212,255,0.08)" stroke-width="1"/>
+          <!-- y축 라벨 -->
+          <text x="0" y="24"  font-size="9" fill="#3a6080" font-family="Space Grotesk">100%</text>
+          <text x="0" y="54"  font-size="9" fill="#3a6080" font-family="Space Grotesk">75%</text>
+          <text x="0" y="84"  font-size="9" fill="#3a6080" font-family="Space Grotesk">50%</text>
+          <text x="0" y="112" font-size="9" fill="#3a6080" font-family="Space Grotesk">25%</text>
+          <!-- 예상 점선 -->
+          <polyline
+            points="36,62 96,50 156,42 216,36 276,34 336,38 396,36 456,34"
+            stroke="#3a6080" stroke-width="1.5" fill="none" stroke-dasharray="6,4"/>
+          <!-- 실제 fill -->
+          <polygon
+            points="36,64 96,52 156,44 216,38 276,36 336,40 396,38 456,36 456,110 36,110"
+            fill="url(#fillGrad)"/>
+          <!-- 실제 선 -->
+          <polyline
+            points="36,64 96,52 156,44 216,38 276,36 336,40 396,38 456,36"
+            stroke="#00ff9d" stroke-width="2.2" fill="none"
+            style="filter:drop-shadow(0 0 4px #00ff9d)"/>
+          <!-- 포인트 -->
+          <circle cx="276" cy="36" r="4" fill="#00ff9d" style="filter:drop-shadow(0 0 5px #00ff9d)"/>
+          <!-- x 라벨 -->
+          <text x="28"  y="126" font-size="9" fill="#3a6080" font-family="Space Grotesk" text-anchor="middle">3월</text>
+          <text x="96"  y="126" font-size="9" fill="#3a6080" font-family="Space Grotesk" text-anchor="middle">4월</text>
+          <text x="156" y="126" font-size="9" fill="#3a6080" font-family="Space Grotesk" text-anchor="middle">5월</text>
+          <text x="216" y="126" font-size="9" fill="#3a6080" font-family="Space Grotesk" text-anchor="middle">6월</text>
+          <text x="276" y="126" font-size="9" fill="#00ff9d" font-family="Space Grotesk" text-anchor="middle">7월</text>
+          <text x="336" y="126" font-size="9" fill="#3a6080" font-family="Space Grotesk" text-anchor="middle">8월</text>
+          <text x="396" y="126" font-size="9" fill="#3a6080" font-family="Space Grotesk" text-anchor="middle">9월</text>
+          <text x="456" y="126" font-size="9" fill="#3a6080" font-family="Space Grotesk" text-anchor="middle">10월</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- 위성 상태 -->
+    <div class="card">
+      <p class="card-label">위성 데이터 수신 현황</p>
+      <div class="sat-list">
+        <div class="sat-item">
+          <div class="sat-dot on"></div>
+          <span class="sat-name">천리안 2A호</span>
+          <span class="sat-val">정상 수신</span>
+        </div>
+        <div class="sat-item">
+          <div class="sat-dot on"></div>
+          <span class="sat-name">일사량 데이터</span>
+          <span class="sat-val">4.8 kWh/m²</span>
+        </div>
+        <div class="sat-item">
+          <div class="sat-dot dim"></div>
+          <span class="sat-name">SRGAN 해상도</span>
+          <span class="sat-val">초해상도 적용</span>
+        </div>
+        <div class="sat-item">
+          <div class="sat-dot on"></div>
+          <span class="sat-name">기상 예측</span>
+          <span class="sat-val">맑음 / 구름 10%</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 하단 -->
+  <div class="bottom-row">
+
+    <!-- 이상 감지 알림 -->
+    <div class="card">
+      <p class="card-label">AI 이상 감지 알림</p>
+      <div class="alert-row ok">
+        <span class="alert-icon">✓</span>
+        <div>
+          <p class="alert-title">이상 없음</p>
+          <p class="alert-desc">위성 기상 예측 대비 효율 정상 범위 유지 중. 패널 오염·고장 감지되지 않음.</p>
+        </div>
+      </div>
+      <div style="margin-top:8px;padding:8px 12px;background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.1);border-radius:8px;">
+        <p style="font-size:10px;color:var(--text-muted);margin-bottom:3px;">마지막 점검</p>
+        <p style="font-size:11px;color:var(--accent);font-family:'Space Grotesk',sans-serif;" id="last-check">오늘 --:-- (IoT 센서 자동)</p>
+      </div>
+    </div>
+
+    <!-- 탄소 절감 -->
+    <div class="card">
+      <p class="card-label">오늘 탄소 절감량</p>
+      <div class="carbon-num">5.8 <span style="font-size:18px;font-weight:400">kg CO₂</span></div>
+      <p style="font-size:10px;color:var(--text-muted);">이번 달 누적: <span style="color:var(--accent2);font-weight:500">142 kg</span></p>
+      <div class="carbon-eq">
+        = 나무 <span>0.5그루</span>가 하루 흡수하는 양<br>
+        = 자동차 <span>22km</span> 주행 배출량과 동일<br>
+        = 학교 전체 <span>3시간</span> 전력 자급
+      </div>
+    </div>
+
+  </div>
+
 </div>
 
+<script>
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    document.getElementById('clock').textContent = h+':'+m+':'+s;
+
+    const mo = now.getMonth()+1;
+    const d  = now.getDate();
+    document.getElementById('last-check').textContent =
+      '오늘 '+h+':'+m+' (IoT 센서 자동)';
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+</script>
 </body>
 </html>
