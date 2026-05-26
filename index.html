@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.E.C — 아이디어 제안</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding: 40px;
+    align-items: center;
+  }
+
+  /* ─── 공통 슬라이드 래퍼 ─── */
+  .slide {
+    width: 960px;
+    background: #c8ccd3;
+    border-radius: 14px;
+    padding: 38px 52px 36px;
+    position: relative;
+  }
+  .slide-label {
+    position: absolute;
+    top: 14px; right: 22px;
+    font-size: 11px;
+    color: #555;
+    letter-spacing: 0.3px;
+  }
+  .slide-divider {
+    position: absolute;
+    top: 32px; left: 22px; right: 22px;
+    height: 0.5px;
+    background: #999;
+  }
+
+  /* ─── 슬라이드 1 : 솔루션 타이틀 ─── */
+  .s1-title {
+    font-size: 30px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 22px 0 6px;
+  }
+  .s1-sub {
+    font-size: 14px;
+    color: #555;
+    margin: 0 0 32px;
+  }
+  .s1-mission {
+    background: #4a4f56;
+    border-radius: 10px;
+    padding: 30px 36px;
+    text-align: center;
+  }
+  .s1-mission p {
+    font-size: 18px;
+    color: #f0f0f0;
+    line-height: 2;
+    font-weight: 400;
+  }
+  .s1-mission span {
+    color: #7de0b0;
+    font-weight: 700;
+  }
+
+  /* ─── 슬라이드 2 : 3대 메커니즘 ─── */
+  .s2-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 22px 0 4px;
+  }
+  .s2-sub {
+    font-size: 12px;
+    color: #666;
+    margin: 0 0 22px;
+  }
+  .s2-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  /* 대시보드 목업 */
+  .dashboard {
+    background: rgba(255,255,255,0.75);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .db-label {
+    font-size: 10px;
+    color: #666;
+    margin: 0 0 2px;
+    letter-spacing: 0.3px;
+  }
+  .db-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+  .db-stat {
+    background: #e4edf4;
+    border-radius: 6px;
+    padding: 8px 10px;
+    text-align: center;
+  }
+  .db-stat-num {
+    display: block;
+    font-size: 17px;
+    font-weight: 700;
+    color: #1a6e4a;
+  }
+  .db-stat-lbl {
+    display: block;
+    font-size: 8.5px;
+    color: #666;
+    margin-top: 2px;
+  }
+  .db-chart-wrap {
+    background: #e4edf4;
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+  .db-chart-title {
+    font-size: 8.5px;
+    color: #666;
+    margin: 0 0 6px;
+  }
+  .db-alert {
+    background: #e2f5ec;
+    border-radius: 6px;
+    padding: 7px 11px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .db-alert-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #1a9e65;
+    flex-shrink: 0;
+  }
+  .db-alert-txt {
+    font-size: 9px;
+    color: #1a6e4a;
+  }
+  .db-carbon {
+    background: #e4edf4;
+    border-radius: 6px;
+    padding: 9px 12px;
+  }
+  .db-carbon p:first-child {
+    font-size: 9px;
+    color: #666;
+    margin: 0 0 3px;
+  }
+  .db-carbon p:last-child {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a6e4a;
+  }
+
+  /* 메커니즘 카드 */
+  .mech-list {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+  .mech-card {
+    background: rgba(255,255,255,0.55);
+    border-radius: 10px;
+    padding: 13px 15px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .mech-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 18px;
+  }
+  .mech-icon.sky    { background: #d6eaf8; }
+  .mech-icon.ground { background: #d5f0e3; }
+  .mech-icon.cls    { background: #fdebd0; }
+  .mech-num {
+    font-size: 9px;
+    font-weight: 500;
+    color: #777;
+    letter-spacing: 0.5px;
+    margin: 0 0 2px;
+  }
+  .mech-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 3px;
+  }
+  .mech-desc {
+    font-size: 10.5px;
+    color: #444;
+    line-height: 1.65;
+    margin: 0 0 5px;
+  }
+  .mech-badge {
+    display: inline-block;
+    font-size: 9px;
+    color: #3a3a3a;
+    background: rgba(0,0,0,0.09);
+    border-radius: 4px;
+    padding: 2px 7px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── 슬라이드 1: 솔루션 타이틀 ── -->
+<div class="slide">
+  <span class="slide-label">2. 아이디어 제안 (Core Idea)</span>
+  <div class="slide-divider"></div>
+
+  <p class="s1-title">S.E.C(Space Energy Control) 시스템 솔루션</p>
+  <p class="s1-sub">위성 영상 및 지상 IoT 융합 기반의 지능형 태양광 관리 및 생태 교육 플랫폼</p>
+
+  <div class="s1-mission">
+    <p>
+      <span>우주 기술(위성)</span>로 하늘의 흐름을 읽고,
+    </p>
+    <p>
+      <span>IoT</span>로 땅의 발전을 바로 잡아,
+    </p>
+    <p>
+      데이터 기반의 <span>살아있는 생태 전환 교육 모델</span>을 구축합니다.
+    </p>
+  </div>
+</div>
+
+<!-- ── 슬라이드 2: 3대 핵심 메커니즘 ── -->
+<div class="slide">
+  <span class="slide-label">2. 아이디어 제안 (Core Idea)</span>
+  <div class="slide-divider"></div>
+
+  <p class="s2-title">S.E.C 시스템의 3대 핵심 메커니즘</p>
+  <p class="s2-sub">위성 × IoT × AI 교육의 유기적 연결</p>
+
+  <div class="s2-body">
+
+    <!-- 왼쪽: 대시보드 목업 -->
+    <div class="dashboard">
+      <p class="db-label">S.E.C 대시보드 — 실시간 현황</p>
+
+      <div class="db-stats">
+        <div class="db-stat">
+          <span class="db-stat-num">94%</span>
+          <span class="db-stat-lbl">패널 효율</span>
+        </div>
+        <div class="db-stat">
+          <span class="db-stat-num">12.4</span>
+          <span class="db-stat-lbl">오늘 발전 (kWh)</span>
+        </div>
+        <div class="db-stat">
+          <span class="db-stat-num">5.8kg</span>
+          <span class="db-stat-lbl">탄소 절감</span>
+        </div>
+      </div>
+
+      <div class="db-chart-wrap">
+        <p class="db-chart-title">예상 효율 vs 실제 효율</p>
+        <svg width="100%" height="72" viewBox="0 0 280 72">
+          <!-- 그리드 -->
+          <line x1="0" y1="20" x2="280" y2="20" stroke="#cdd6df" stroke-width="0.5"/>
+          <line x1="0" y1="40" x2="280" y2="40" stroke="#cdd6df" stroke-width="0.5"/>
+          <line x1="0" y1="60" x2="280" y2="60" stroke="#cdd6df" stroke-width="0.5"/>
+          <!-- 예상 효율 점선 -->
+          <polyline points="0,52 46,40 92,34 138,28 184,26 230,30 280,28"
+            stroke="#9ab4cc" stroke-width="1.4" fill="none" stroke-dasharray="5,4"/>
+          <!-- 실제 효율 실선 -->
+          <polyline points="0,54 46,42 92,36 138,30 184,28 230,32 280,30"
+            stroke="#1a9e65" stroke-width="2" fill="none"/>
+          <!-- x 라벨 -->
+          <text x="0"   y="71" font-size="7" fill="#aaa">3월</text>
+          <text x="44"  y="71" font-size="7" fill="#aaa">4월</text>
+          <text x="90"  y="71" font-size="7" fill="#aaa">5월</text>
+          <text x="136" y="71" font-size="7" fill="#aaa">6월</text>
+          <text x="182" y="71" font-size="7" fill="#aaa">7월</text>
+          <text x="228" y="71" font-size="7" fill="#aaa">8월</text>
+        </svg>
+        <!-- 범례 -->
+        <div style="display:flex;gap:14px;margin-top:5px;">
+          <div style="display:flex;align-items:center;gap:5px;">
+            <svg width="18" height="6"><line x1="0" y1="3" x2="18" y2="3" stroke="#9ab4cc" stroke-width="1.4" stroke-dasharray="4,3"/></svg>
+            <span style="font-size:8px;color:#888;">예상 (위성 기상)</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;">
+            <svg width="18" height="6"><line x1="0" y1="3" x2="18" y2="3" stroke="#1a9e65" stroke-width="2"/></svg>
+            <span style="font-size:8px;color:#888;">실제 발전</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="db-alert">
+        <div class="db-alert-dot"></div>
+        <span class="db-alert-txt">이상 없음 — 위성 기상 예측 대비 정상 범위</span>
+      </div>
+
+      <div class="db-carbon">
+        <p>오늘 우리 학교가 절감한 탄소</p>
+        <p>= 나무 <strong>0.5그루</strong>가 하루 흡수하는 양</p>
+      </div>
+    </div>
+
+    <!-- 오른쪽: 3대 메커니즘 -->
+    <div class="mech-list">
+
+      <div class="mech-card">
+        <div class="mech-icon sky">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a5fa0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a7 7 0 0 1 7 7c0 4-7 13-7 13S5 13 5 9a7 7 0 0 1 7-7z"/>
+            <circle cx="12" cy="9" r="2.5"/>
+          </svg>
+        </div>
+        <div>
+          <p class="mech-num">Mechanism 1 — 하늘의 눈 (Top-Down 위성 분석)</p>
+          <p class="mech-title">위성으로 최적 발전량 산출</p>
+          <p class="mech-desc">천리안 위성 2A호 실시간 일사량 데이터와 국토지리정보원 항공사진(SRGAN 초해상도)을 융합해 학교별 이론적 최적 발전 가능량을 정밀하게 산출합니다.</p>
+          <span class="mech-badge">천리안 2A호 · SRGAN · 국토지리정보원</span>
+        </div>
+      </div>
+
+      <div class="mech-card">
+        <div class="mech-icon ground">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a6e4a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="4" width="16" height="16" rx="2"/>
+            <path d="M9 9h6M9 12h6M9 15h4"/>
+          </svg>
+        </div>
+        <div>
+          <p class="mech-num">Mechanism 2 — 땅의 센서 (Bottom-Up IoT 실측)</p>
+          <p class="mech-title">IoT + AI로 이상 선제 감지</p>
+          <p class="mech-desc">지상 IoT 장치로 실제 발전량을 측정하고, AI 에이전트가 위성 예측치와 실시간 비교 분석해 패널 오염·장비 고장을 선제적으로 감지·알림합니다.</p>
+          <span class="mech-badge">IoT 센서 · AI 에이전트 · 실시간 비교분석</span>
+        </div>
+      </div>
+
+      <div class="mech-card">
+        <div class="mech-icon cls">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a06010" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14"/>
+            <path d="M9 7h6M9 11h6M9 15h3"/>
+            <path d="M4 19h16"/>
+          </svg>
+        </div>
+        <div>
+          <p class="mech-num">Mechanism 3 — 교실의 미래 (AI 기반 생태 교육)</p>
+          <p class="mech-title">데이터로 살아있는 환경 교육</p>
+          <p class="mech-desc">절감된 에너지·탄소 데이터를 학생용 시각 대시보드와 생성형 AI 챗봇으로 연동해, 학생들이 오늘의 탄소 절감량을 정량적으로 직접 체감합니다.</p>
+          <span class="mech-badge">시각 대시보드 · 생성형 AI 챗봇</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
